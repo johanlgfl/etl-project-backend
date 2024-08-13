@@ -1,17 +1,14 @@
-# from utils.db import db
-from app import db
+from sqlalchemy import Table, Column
+from sqlalchemy.sql.sqltypes import Integer, String, Boolean
+from config.db import meta, engine
 
-class Category(db.Model):
-    __tablename__ = 'categories'
+categories = Table(
+    "categories",
+    meta,
+    Column("id", Integer, primary_key=True, nullable=False),
+    Column("name", String(255), nullable=False),
+    Column("description", String(255), nullable=False),
+    Column("active", Boolean, default=True, nullable=False),
+)
 
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(255), nullable=False)
-    description = db.Column(db.String(255), nullable=False)
-    active = db.Column(db.Boolean, default=True)
-
-    def __init__(self, name, description):
-        self.name = name
-        self.description = description
-
-    def __repr__(self):
-        return f'<Category {self.name}>'
+meta.create_all(engine)
